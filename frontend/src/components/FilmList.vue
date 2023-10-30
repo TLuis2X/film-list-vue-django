@@ -1,11 +1,10 @@
 <template>
   <div>
     
-    <button @click="showModal = true" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Add Film</button>
-    <AddFilmModal v-if="showModal" @add-film="onAddFilm" />
+    <AddFilmModal @add-film="onAddFilm" />
 
     <div v-for="(film, index) in films" :key="index">
-      <Film :film="film" :delete-film="deleteFilm" />
+      <Film :film="film" :delete-film="deleteFilm" @update-film="onEditFilm" />
     </div>
 
   </div>
@@ -23,9 +22,9 @@ export default {
   data() {
     return {
       films: null,
-      showModal: false,
     }
   },
+  /***************** ALL FUNCTIONS ********************************************/
   methods: {
     // Fetches all films using fetch API (GET)
     fetchFilms() {
@@ -55,14 +54,42 @@ export default {
 
         this.films.push(data);
 
-        this.showModal = false;
-
         this.fetchFilms();
 
         console.log("Response Data:", data);
       }
       else {
         throw new Error('Error creating film!!!!');
+      }
+    },
+    // Updates the selected film with the given details (PUT)
+    async onEditFilm(updatedFilm) {
+      const filmId = updatedFilm.id;
+      let response = await fetch(`http://localhost:8000/api/film/${filmId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedFilm),
+      });
+      console.log(response);
+
+      if (response.ok) {
+
+        // Updates the film list 
+        this.films = this.films.map(film => {
+          if (film.id === updatedFilm.id) {
+            return updatedFilm;
+          }
+          else {
+            return film;
+          }
+        });
+
+        console.log('Updated Film:', updatedFilm);
+      }
+      else {
+        console.log(response);
       }
     },
     // Deletes the selected film from database (DELETE)

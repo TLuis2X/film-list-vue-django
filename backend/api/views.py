@@ -24,12 +24,18 @@ def film_api_view(request, film_id):
     elif request.method == 'POST':
         return JsonResponse(film.to_dict())
     elif request.method == 'PUT':
-        return JsonResponse(film.to_dict())
+        data = json.loads(request.body)
+
+        film = Film(**data)
+
+        film.save()
+
+        return JsonResponse({"message": "Film was updated in database successfully"})
     elif request.method == 'DELETE':
         film.delete()
         return JsonResponse({"message": "Film was deleted from database successfully"})
     else:
-        return JsonResponse({"message": "this method is not allowed"}, status=405)
+        return JsonResponse({"error": "this method is not allowed"}, status=405)
 
 @csrf_exempt
 def films_api_view(request):
@@ -56,4 +62,4 @@ def films_api_view(request):
         except Exception as e:
             return JsonResponse({"error": "Error occured while adding new film"}, status=400)
     else:
-        return JsonResponse({'error': 'errrooooorrrrrr'})
+        return JsonResponse({'error': 'This method is not allowed'})
