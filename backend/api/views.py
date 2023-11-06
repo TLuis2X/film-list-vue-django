@@ -6,24 +6,23 @@ import json
 
 from .models import Film
 
-
+''' This is a test view function '''
 def test_api_view(request):
     return JsonResponse({
         'message': 'Good response!'
     })
 
+''' Edits the film element or deletes the film element with given id '''
 @csrf_exempt
 def film_api_view(request, film_id):
+    ''' This checks if film with given id exists '''
     try:
         film = Film.objects.get(id=film_id)
     except Film.DoesNotExist:
         return JsonResponse({"error": "film not found"}, status=404)
     
-    if request.method == 'GET':
-        return JsonResponse(film.to_dict())
-    elif request.method == 'POST':
-        return JsonResponse(film.to_dict())
-    elif request.method == 'PUT':
+
+    if request.method == 'PUT':
         data = json.loads(request.body)
 
         film = Film(**data)
@@ -37,6 +36,7 @@ def film_api_view(request, film_id):
     else:
         return JsonResponse({"error": "this method is not allowed"}, status=405)
 
+''' Fetches the film elements or adds a new film element  '''
 @csrf_exempt
 def films_api_view(request):
     if request.method == 'GET':
