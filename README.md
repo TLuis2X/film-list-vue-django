@@ -1,6 +1,8 @@
-# Template for ECS639U Individual Coursework
+# Film List App
 
-This template should be used as the starting point for your individual coursework in the module ECS639U Web Programming (at Queen Mary University of London). Module leader: Paulo Oliva <[p.oliva@qmul.ac.uk](mailto:p.oliva@qmul.ac.uk)>
+A simple film list which lets users add, delete, and edit their favourite film titles using Vue and Django
+
+Part of the module ECS639U Web Programming (at Queen Mary University of London). Module leader: Paulo Oliva <[p.oliva@qmul.ac.uk](mailto:p.oliva@qmul.ac.uk)>
 
 ## Create conda environment
 
